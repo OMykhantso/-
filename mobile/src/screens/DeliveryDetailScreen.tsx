@@ -184,19 +184,19 @@ export default function DeliveryDetailScreen() {
         {delivery.status === "ASSIGNED" && currentAssignment?.status === "ASSIGNED" ? (
           <>
             <ActionButton
-              label="Accept Delivery"
+              label="Прийняти доставку"
               onPress={() => runAction("accept")}
               loading={actionInFlight === "accept"}
               disabled={isBusy}
             />
             <View style={styles.spacer} />
             <ActionButton
-              label="Reject"
+              label="Відхилити"
               variant="danger"
               onPress={() =>
-                Alert.alert("Reject delivery?", "This will send it back for reassignment.", [
-                  { text: "Cancel", style: "cancel" },
-                  { text: "Reject", style: "destructive", onPress: () => runAction("reject") },
+                Alert.alert("Відхилити доставку?", "Її буде повернуто для перепризначення.", [
+                  { text: "Скасувати", style: "cancel" },
+                  { text: "Відхилити", style: "destructive", onPress: () => runAction("reject") },
                 ])
               }
               loading={actionInFlight === "reject"}
@@ -207,7 +207,7 @@ export default function DeliveryDetailScreen() {
 
         {delivery.status === "ASSIGNED" && currentAssignment?.status === "ACCEPTED" ? (
           <ActionButton
-            label="Mark Picked Up"
+            label="Позначити забраним"
             onPress={() => runAction("pickup")}
             loading={actionInFlight === "pickup"}
             disabled={isBusy}
@@ -216,7 +216,7 @@ export default function DeliveryDetailScreen() {
 
         {delivery.status === "PICKED_UP" ? (
           <ActionButton
-            label="Start Transit"
+            label="Почати доставку"
             onPress={() => runAction("start_transit")}
             loading={actionInFlight === "start_transit"}
             disabled={isBusy}
@@ -226,7 +226,7 @@ export default function DeliveryDetailScreen() {
         {delivery.status === "IN_TRANSIT" ? (
           <>
             <ActionButton
-              label="Deliver"
+              label="Доставити"
               onPress={() => router.push(`/delivery/${delivery.id}/proof`)}
               disabled={isBusy}
             />
@@ -235,7 +235,8 @@ export default function DeliveryDetailScreen() {
               <View style={styles.failBox}>
                 <TextInput
                   style={styles.failInput}
-                  placeholder="Reason the delivery failed..."
+                  placeholder="Причина невдалої доставки..."
+                  placeholderTextColor="#94A3B8"
                   value={failReason}
                   onChangeText={setFailReason}
                   multiline
@@ -243,7 +244,7 @@ export default function DeliveryDetailScreen() {
                 <View style={styles.failButtons}>
                   <View style={styles.failButtonHalf}>
                     <ActionButton
-                      label="Cancel"
+                      label="Скасувати"
                       variant="outline"
                       onPress={() => {
                         setShowFailReason(false);
@@ -253,7 +254,7 @@ export default function DeliveryDetailScreen() {
                   </View>
                   <View style={styles.failButtonHalf}>
                     <ActionButton
-                      label="Confirm Failed"
+                      label="Підтвердити невдачу"
                       variant="danger"
                       loading={actionInFlight === "fail"}
                       disabled={!failReason.trim() || isBusy}
@@ -264,7 +265,7 @@ export default function DeliveryDetailScreen() {
               </View>
             ) : (
               <ActionButton
-                label="Report Failed"
+                label="Повідомити про невдачу"
                 variant="danger"
                 onPress={() => setShowFailReason(true)}
                 disabled={isBusy}
@@ -274,14 +275,14 @@ export default function DeliveryDetailScreen() {
         ) : null}
 
         {delivery.status === "CREATED" && currentAssignment?.status === "REJECTED" ? (
-          <Text style={styles.infoText}>You rejected this delivery. It's waiting for reassignment.</Text>
+          <Text style={styles.infoText}>Ви відхилили цю доставку. Очікує на перепризначення.</Text>
         ) : null}
         {["DELIVERED", "FAILED", "CANCELLED"].includes(delivery.status) ? (
-          <Text style={styles.infoText}>This delivery is complete. No further action needed.</Text>
+          <Text style={styles.infoText}>Цю доставку завершено. Подальші дії не потрібні.</Text>
         ) : null}
       </View>
 
-      <Section title="History">
+      <Section title="Історія статусів">
         <StatusTimeline history={delivery.statusHistory} />
       </Section>
     </ScrollView>
@@ -298,59 +299,66 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F9FAFB" },
+  container: { flex: 1, backgroundColor: "#F8FAFC" },
   content: { padding: 16, paddingBottom: 48 },
-  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F9FAFB" },
-  error: { color: "#DC2626", fontSize: 14, textAlign: "center", paddingHorizontal: 24 },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8FAFC" },
+  error: { color: "#EF4444", fontSize: 14, textAlign: "center", paddingHorizontal: 24 },
   statusPill: {
     alignSelf: "flex-start",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
     borderRadius: 999,
-    marginBottom: 12,
+    marginBottom: 16,
   },
   statusPillText: { color: "#FFFFFF", fontWeight: "700", fontSize: 12, textTransform: "uppercase" },
   map: {
     width: "100%",
     height: 220,
-    borderRadius: 12,
+    borderRadius: 16,
     marginBottom: 16,
   },
   section: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 14,
+    borderRadius: 16,
+    padding: 16,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#E2E8F0",
     marginBottom: 12,
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
   },
   sectionTitle: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#9CA3AF",
+    color: "#64748B",
     textTransform: "uppercase",
-    marginBottom: 8,
+    marginBottom: 10,
+    letterSpacing: 0.4,
   },
-  address: { fontSize: 15, fontWeight: "600", color: "#111827" },
-  addressDetail: { fontSize: 14, color: "#4B5563", marginTop: 2 },
+  address: { fontSize: 15, fontWeight: "600", color: "#0F172A" },
+  addressDetail: { fontSize: 14, color: "#475569", marginTop: 2 },
   actions: { marginVertical: 8 },
-  spacer: { height: 10 },
-  infoText: { color: "#6B7280", fontSize: 13, textAlign: "center", paddingVertical: 8 },
+  spacer: { height: 12 },
+  infoText: { color: "#64748B", fontSize: 13, textAlign: "center", paddingVertical: 8 },
   failBox: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 16,
+    padding: 14,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#E2E8F0",
   },
   failInput: {
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 8,
-    padding: 10,
+    borderColor: "#E2E8F0",
+    borderRadius: 10,
+    padding: 12,
     minHeight: 70,
     textAlignVertical: "top",
-    marginBottom: 10,
+    marginBottom: 12,
+    color: "#0F172A",
   },
   failButtons: { flexDirection: "row", gap: 10 },
   failButtonHalf: { flex: 1 },

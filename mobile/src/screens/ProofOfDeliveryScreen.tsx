@@ -38,7 +38,7 @@ export default function ProofOfDeliveryScreen() {
   const pickFromCamera = async () => {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (permission.status !== "granted") {
-      Alert.alert("Camera permission needed", "Allow camera access to take a delivery photo.");
+      Alert.alert("Потрібен доступ до камери", "Дозвольте доступ до камери, щоб зробити фото доставки.");
       return;
     }
     const result = await ImagePicker.launchCameraAsync({
@@ -52,7 +52,7 @@ export default function ProofOfDeliveryScreen() {
   const pickFromLibrary = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permission.status !== "granted") {
-      Alert.alert("Photo library permission needed", "Allow photo access to attach a delivery photo.");
+      Alert.alert("Потрібен доступ до фотобібліотеки", "Дозвольте доступ до фото, щоб додати фото доставки.");
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -73,15 +73,15 @@ export default function ProofOfDeliveryScreen() {
   const onSubmit = async () => {
     if (!token || !id) return;
     if (!photoBase64) {
-      setError("Attach a photo before submitting.");
+      setError("Додайте фото перед підтвердженням.");
       return;
     }
     if (signaturePadRef.current?.isEmpty() ?? true) {
-      setError("Capture a signature before submitting.");
+      setError("Отримайте підпис перед підтвердженням.");
       return;
     }
     if (!coords) {
-      setError("Waiting for your location — try refreshing it.");
+      setError("Очікуємо на визначення геолокації — спробуйте оновити.");
       return;
     }
 
@@ -97,11 +97,11 @@ export default function ProofOfDeliveryScreen() {
         note: note.trim() || undefined,
       });
       await refetch();
-      Alert.alert("Delivered", "Proof of delivery submitted successfully.", [
-        { text: "OK", onPress: () => router.replace("/home") },
+      Alert.alert("Доставлено", "Підтвердження доставки успішно надіслано.", [
+        { text: "Гаразд", onPress: () => router.replace("/home") },
       ]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not submit proof of delivery.");
+      setError(err instanceof Error ? `Помилка: ${err.message}` : "Не вдалося підтвердити доставку.");
     } finally {
       setSubmitting(false);
     }
@@ -109,114 +109,122 @@ export default function ProofOfDeliveryScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.sectionTitle}>Photo</Text>
+      <Text style={styles.sectionTitle}>Фото</Text>
       {photoUri ? (
         <Image source={{ uri: photoUri }} style={styles.photoPreview} />
       ) : (
         <View style={styles.photoPlaceholder}>
-          <Text style={styles.placeholderText}>No photo yet</Text>
+          <Text style={styles.placeholderText}>Фото ще немає</Text>
         </View>
       )}
       <View style={styles.row}>
         <View style={styles.half}>
-          <ActionButton label="Take Photo" onPress={pickFromCamera} variant="secondary" />
+          <ActionButton label="Зробити фото" onPress={pickFromCamera} variant="secondary" />
         </View>
         <View style={styles.half}>
-          <ActionButton label="Choose Photo" onPress={pickFromLibrary} variant="outline" />
+          <ActionButton label="Обрати фото" onPress={pickFromLibrary} variant="outline" />
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Signature</Text>
+      <Text style={styles.sectionTitle}>Підпис</Text>
       <SignaturePad
         ref={signaturePadRef}
         height={180}
       />
       <View style={styles.signatureButtons}>
         <ActionButton
-          label="Clear Signature"
+          label="Очистити підпис"
           variant="outline"
           onPress={() => signaturePadRef.current?.clear()}
         />
       </View>
 
-      <Text style={styles.sectionTitle}>Location</Text>
+      <Text style={styles.sectionTitle}>Місцезнаходження</Text>
       <View style={styles.locationBox}>
         {locating ? (
-          <Text style={styles.placeholderText}>Getting current location…</Text>
+          <Text style={styles.placeholderText}>Визначаємо місцезнаходження…</Text>
         ) : coords ? (
           <Text style={styles.locationText}>
             {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)}
           </Text>
         ) : (
-          <Text style={styles.placeholderText}>Location unavailable</Text>
+          <Text style={styles.placeholderText}>Місцезнаходження недоступне</Text>
         )}
-        <ActionButton label="Refresh" variant="outline" onPress={refreshLocation} />
+        <ActionButton label="Оновити" variant="outline" onPress={refreshLocation} />
       </View>
 
-      <Text style={styles.sectionTitle}>Note (optional)</Text>
+      <Text style={styles.sectionTitle}>Примітка (необов'язково)</Text>
       <TextInput
         style={styles.noteInput}
         value={note}
         onChangeText={setNote}
-        placeholder="Left with front desk, etc."
+        placeholder="Залишено на рецепції тощо"
+        placeholderTextColor="#94A3B8"
         multiline
       />
 
       {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <View style={styles.submitWrapper}>
-        <ActionButton label="Submit Proof of Delivery" onPress={onSubmit} loading={submitting} />
+        <ActionButton label="Підтвердити доставку" onPress={onSubmit} loading={submitting} />
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F9FAFB" },
+  container: { flex: 1, backgroundColor: "#F8FAFC" },
   content: { padding: 16, paddingBottom: 48 },
   sectionTitle: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#9CA3AF",
+    color: "#64748B",
     textTransform: "uppercase",
-    marginTop: 20,
-    marginBottom: 8,
+    marginTop: 24,
+    marginBottom: 10,
+    letterSpacing: 0.4,
   },
-  photoPreview: { width: "100%", height: 200, borderRadius: 12, backgroundColor: "#E5E7EB" },
+  photoPreview: { width: "100%", height: 200, borderRadius: 16, backgroundColor: "#E2E8F0" },
   photoPlaceholder: {
     width: "100%",
     height: 160,
-    borderRadius: 12,
-    backgroundColor: "#F3F4F6",
+    borderRadius: 16,
+    backgroundColor: "#F1F5F9",
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#E2E8F0",
     alignItems: "center",
     justifyContent: "center",
   },
-  placeholderText: { color: "#9CA3AF", fontSize: 13 },
-  row: { flexDirection: "row", gap: 10, marginTop: 10 },
+  placeholderText: { color: "#94A3B8", fontSize: 13 },
+  row: { flexDirection: "row", gap: 12, marginTop: 12 },
   half: { flex: 1 },
-  signatureButtons: { marginTop: 10, alignItems: "flex-start", width: 160 },
+  signatureButtons: { marginTop: 12, alignItems: "flex-start", width: 180 },
   locationBox: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
-    padding: 12,
+    borderColor: "#E2E8F0",
+    padding: 14,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
   },
-  locationText: { fontSize: 14, color: "#111827", fontWeight: "600" },
+  locationText: { fontSize: 14, color: "#0F172A", fontWeight: "600" },
   noteInput: {
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 8,
-    padding: 10,
+    borderColor: "#E2E8F0",
+    borderRadius: 10,
+    padding: 12,
     minHeight: 60,
     textAlignVertical: "top",
     backgroundColor: "#FFFFFF",
+    color: "#0F172A",
   },
-  error: { color: "#DC2626", fontSize: 13, marginTop: 16 },
+  error: { color: "#EF4444", fontSize: 13, marginTop: 16 },
   submitWrapper: { marginTop: 24 },
 });

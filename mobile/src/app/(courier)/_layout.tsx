@@ -23,11 +23,11 @@ function CourierShell({ children }: { children: React.ReactNode }) {
     if (!socket) return;
 
     const onAssigned = () => {
-      showBanner("New delivery assigned to you.");
+      showBanner("Вам призначено нову доставку.");
       refetch();
     };
     const onRouteUpdated = () => {
-      showBanner("Your route was updated by dispatch.");
+      showBanner("Диспетчер оновив ваш маршрут.");
       refetch();
     };
 
@@ -58,10 +58,18 @@ export default function CourierLayout() {
   return (
     <DeliveryProvider>
       <CourierShell>
-        <Stack screenOptions={{ headerShown: true }}>
-          <Stack.Screen name="home" options={{ title: "My Deliveries" }} />
-          <Stack.Screen name="delivery/[id]/index" options={{ title: "Delivery" }} />
-          <Stack.Screen name="delivery/[id]/proof" options={{ title: "Proof of Delivery" }} />
+        <Stack
+          screenOptions={{
+            headerShown: true,
+            headerStyle: { backgroundColor: "#FFFFFF" },
+            headerTintColor: "#0F172A",
+            headerTitleStyle: { fontWeight: "700" },
+            headerShadowVisible: false,
+          }}
+        >
+          <Stack.Screen name="home" options={{ title: "Мої доставки" }} />
+          <Stack.Screen name="delivery/[id]/index" options={{ title: "Доставка" }} />
+          <Stack.Screen name="delivery/[id]/proof" options={{ title: "Підтвердження доставки" }} />
         </Stack>
       </CourierShell>
     </DeliveryProvider>

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Courier App",
+    "name": "Кур'єр",
     "slug": "delivery-courier-mobile",
     "scheme": "courierapp",
     "version": "1.0.0",
@@ -15,9 +15,9 @@
         "googleMapsApiKey": ""
       },
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "The courier app needs your location while it's open to track deliveries and share your position on the map.",
-        "NSCameraUsageDescription": "The courier app needs camera access to take a proof-of-delivery photo.",
-        "NSPhotoLibraryUsageDescription": "The courier app needs photo library access to attach a proof-of-delivery photo."
+        "NSLocationWhenInUseUsageDescription": "Додатку потрібен доступ до геолокації, поки він відкритий, щоб відстежувати доставки та показувати ваше положення на карті.",
+        "NSCameraUsageDescription": "Додатку потрібен доступ до камери, щоб зробити фото підтвердження доставки.",
+        "NSPhotoLibraryUsageDescription": "Додатку потрібен доступ до фотобібліотеки, щоб додати фото підтвердження доставки."
       }
     },
     "android": {
@@ -48,14 +48,14 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "The courier app needs your location while it's open to track deliveries and share your position on the map."
+          "locationWhenInUsePermission": "Додатку потрібен доступ до геолокації, поки він відкритий, щоб відстежувати доставки та показувати ваше положення на карті."
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "The courier app needs photo library access to attach a proof-of-delivery photo.",
-          "cameraPermission": "The courier app needs camera access to take a proof-of-delivery photo."
+          "photosPermission": "Додатку потрібен доступ до фотобібліотеки, щоб додати фото підтвердження доставки.",
+          "cameraPermission": "Додатку потрібен доступ до камери, щоб зробити фото підтвердження доставки."
         }
       ]
     ]
