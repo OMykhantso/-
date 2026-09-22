@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import * as Location from "expo-location";
 import { postCourierLocation } from "../api/courier";
 
@@ -34,9 +34,6 @@ export async function getCurrentCoords(): Promise<Coords | null> {
  * Foreground-only, per the mobile app's scope.
  */
 export function useCourierLocationStreaming(enabled: boolean, token: string | null): void {
-  const enabledRef = useRef(enabled);
-  enabledRef.current = enabled;
-
   useEffect(() => {
     if (!enabled || !token) return;
 

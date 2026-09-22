@@ -87,13 +87,16 @@ npm run dev             # http://localhost:5173
 
 ```bash
 cd mobile
-npm install
+cp .env.example .env    # EXPO_PUBLIC_API_URL=http://localhost:4000
+npm install              # if npm reports a peer-dependency conflict, retry with --legacy-peer-deps
 npx expo start
 ```
 
 Point `EXPO_PUBLIC_API_URL` at your machine's LAN IP (not `localhost`) when
 testing on a physical device, since the device can't resolve your dev
-machine's loopback address.
+machine's loopback address. Android maps need a Google Maps API key
+(`app.json` → `android.config.googleMaps.apiKey`) — iOS via Expo Go works
+without one.
 
 ## Database
 
