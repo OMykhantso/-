@@ -1,0 +1,175 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  COURIER
+  DISPATCHER
+}
+
+enum DeliveryStatus {
+  CREATED
+  ASSIGNED
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+  FAILED
+  CANCELLED
+}
+
+enum AssignmentStatus {
+  ASSIGNED
+  ACCEPTED
+  REJECTED
+  COMPLETED
+}
+
+enum RouteStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+}
+
+enum StopKind {
+  PICKUP
+  DROPOFF
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  phone        String?
+  role         Role
+  createdAt    DateTime @default(now())
+
+  addresses          Address[]
+  deliveriesAsClient Delivery[]          @relation("ClientDeliveries")
+  assignments        CourierAssignment[] @relation("CourierAssignments")
+  routes             Route[]             @relation("CourierRoutes")
+  statusChanges      StatusHistory[]     @relation("ChangedBy")
+  locations          CourierLocation[]   @relation("CourierLocations")
+}
+
+model Address {
+  id      String @id @default(uuid())
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+  label   String
+  street  String
+  city    String
+  lat     Float
+  lng     Float
+
+  pickupFor  Delivery[] @relation("PickupAddress")
+  dropoffFor Delivery[] @relation("DropoffAddress")
+
+  @@index([ownerId])
+}
+
+model Delivery {
+  id               String         @id @default(uuid())
+  clientId         String
+  client           User           @relation("ClientDeliveries", fields: [clientId], references: [id])
+  pickupAddressId  String
+  pickupAddress    Address        @relation("PickupAddress", fields: [pickupAddressId], references: [id])
+  dropoffAddressId String
+  dropoffAddress   Address        @relation("DropoffAddress", fields: [dropoffAddressId], references: [id])
+  description      String?
+  weightKg         Float?
+  packageSize      String?
+  status           DeliveryStatus @default(CREATED)
+  etaAt            DateTime?
+  proofPhotoUrl    String?
+  proofSignature   String?
+  proofNote        String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  assignments   CourierAssignment[]
+  statusHistory StatusHistory[]
+  routeStops    RouteStop[]
+
+  @@index([clientId])
+  @@index([status])
+}
+
+// Deliberately NOT one-to-one: a rejected/failed assignment stays for audit
+// history and a fresh row is created when the dispatcher reassigns. The
+// "current" assignment for a delivery is the most recent row by assignedAt.
+model CourierAssignment {
+  id         String           @id @default(uuid())
+  deliveryId String
+  delivery   Delivery         @relation(fields: [deliveryId], references: [id])
+  courierId  String
+  courier    User             @relation("CourierAssignments", fields: [courierId], references: [id])
+  status     AssignmentStatus @default(ASSIGNED)
+  assignedAt DateTime         @default(now())
+
+  @@index([courierId])
+  @@index([deliveryId])
+}
+
+model Route {
+  id              String      @id @default(uuid())
+  courierId       String
+  courier         User        @relation("CourierRoutes", fields: [courierId], references: [id])
+  status          RouteStatus @default(PLANNED)
+  totalDistanceKm Float?
+  createdAt       DateTime    @default(now())
+
+  stops RouteStop[]
+
+  @@index([courierId])
+}
+
+model RouteStop {
+  id          String    @id @default(uuid())
+  routeId     String
+  route       Route     @relation(fields: [routeId], references: [id])
+  deliveryId  String
+  delivery    Delivery  @relation(fields: [deliveryId], references: [id])
+  sequence    Int
+  kind        StopKind
+  lat         Float
+  lng         Float
+  etaAt       DateTime?
+  completedAt DateTime?
+
+  @@index([routeId])
+  @@index([deliveryId])
+}
+
+model StatusHistory {
+  id          String         @id @default(uuid())
+  deliveryId  String
+  delivery    Delivery       @relation(fields: [deliveryId], references: [id])
+  status      DeliveryStatus
+  changedById String
+  changedBy   User           @relation("ChangedBy", fields: [changedById], references: [id])
+  note        String?
+  lat         Float?
+  lng         Float?
+  createdAt   DateTime       @default(now())
+
+  @@index([deliveryId])
+}
+
+model CourierLocation {
+  id        String   @id @default(uuid())
+  courierId String
+  courier   User     @relation("CourierLocations", fields: [courierId], references: [id])
+  lat       Float
+  lng       Float
+  speedKmh  Float?
+  createdAt DateTime @default(now())
+
+  @@index([courierId, createdAt])
+}

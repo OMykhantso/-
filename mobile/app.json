@@ -1,0 +1,66 @@
+{
+  "expo": {
+    "name": "Courier App",
+    "slug": "delivery-courier-mobile",
+    "scheme": "courierapp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.deliverymanagement.courier",
+      "config": {
+        "googleMapsApiKey": ""
+      },
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "The courier app needs your location while it's open to track deliveries and share your position on the map.",
+        "NSCameraUsageDescription": "The courier app needs camera access to take a proof-of-delivery photo.",
+        "NSPhotoLibraryUsageDescription": "The courier app needs photo library access to attach a proof-of-delivery photo."
+      }
+    },
+    "android": {
+      "package": "com.deliverymanagement.courier",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": ""
+        }
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "The courier app needs your location while it's open to track deliveries and share your position on the map."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The courier app needs photo library access to attach a proof-of-delivery photo.",
+          "cameraPermission": "The courier app needs camera access to take a proof-of-delivery photo."
+        }
+      ]
+    ],
+    "extra": {
+      "router": {}
+    }
+  }
+}
