@@ -9,7 +9,11 @@ services:
       POSTGRES_PASSWORD: delivery
       POSTGRES_DB: delivery
     ports:
-      - "5432:5432"
+      # Host-side 5433 to avoid clashing with a native Postgres install
+      # already using 5432 on the host. The container's internal port
+      # (and the `backend` service's DATABASE_URL, which talks to it over
+      # the docker network as `db:5432`) is unaffected.
+      - "5433:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
