@@ -48,7 +48,7 @@ export default function CourierDashboardPage() {
         </div>
       ) : deliveries.length === 0 ? (
         <div className="empty-state">
-          <p>No deliveries assigned to you yet.</p>
+          <p>Вам ще не призначено жодної доставки.</p>
         </div>
       ) : (
         <div className="card-grid">

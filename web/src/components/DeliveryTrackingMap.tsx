@@ -41,14 +41,14 @@ export default function DeliveryTrackingMap({ pickup, dropoff, courierPosition }
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker position={[pickup.lat, pickup.lng]} icon={coloredIcon("green")}>
-        <Popup>Pickup — {pickup.label}</Popup>
+        <Popup>Звідки — {pickup.label}</Popup>
       </Marker>
       <Marker position={[dropoff.lat, dropoff.lng]} icon={coloredIcon("red")}>
-        <Popup>Dropoff — {dropoff.label}</Popup>
+        <Popup>Куди — {dropoff.label}</Popup>
       </Marker>
       {courierPosition && (
         <Marker position={[courierPosition.lat, courierPosition.lng]} icon={coloredIcon("blue")}>
-          <Popup>Courier's current position</Popup>
+          <Popup>Поточне місцезнаходження кур'єра</Popup>
         </Marker>
       )}
       <Polyline

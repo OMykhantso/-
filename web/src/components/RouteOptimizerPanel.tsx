@@ -34,7 +34,7 @@ export default function RouteOptimizerPanel({
 
   async function handleOptimize() {
     if (!courierId || selectedIds.length === 0) {
-      setError("Pick a courier and at least one of their deliveries.");
+      setError("Оберіть кур'єра та хоча б одну з його доставок.");
       return;
     }
     setSubmitting(true);
@@ -43,7 +43,7 @@ export default function RouteOptimizerPanel({
       const result = await optimizeRoute(courierId, selectedIds);
       setRoute(result);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Could not optimize route");
+      setError(err instanceof ApiError ? `Помилка: ${err.message}` : "Не вдалося оптимізувати маршрут");
     } finally {
       setSubmitting(false);
     }
@@ -51,12 +51,12 @@ export default function RouteOptimizerPanel({
 
   return (
     <div className="panel">
-      <h3>Route optimization</h3>
+      <h3>Оптимізація маршруту</h3>
       <p className="muted small">
-        Pick a courier and the deliveries they're carrying to compute an optimized pickup/dropoff order.
+        Оберіть кур'єра та доставки, які він виконує, щоб розрахувати оптимальний порядок забору й доставки.
       </p>
       <label className="field">
-        <span>Courier</span>
+        <span>Кур'єр</span>
         <select
           value={courierId}
           onChange={(e) => {
@@ -65,7 +65,7 @@ export default function RouteOptimizerPanel({
             setRoute(null);
           }}
         >
-          <option value="">Select courier…</option>
+          <option value="">Оберіть кур'єра…</option>
           {couriers.map((c) => (
             <option key={c.courierId} value={c.courierId}>
               {c.name}
@@ -77,7 +77,7 @@ export default function RouteOptimizerPanel({
       {courierId && (
         <div className="checklist">
           {eligibleDeliveries.length === 0 ? (
-            <p className="muted small">This courier has no active deliveries to optimize.</p>
+            <p className="muted small">У цього кур'єра немає активних доставок для оптимізації.</p>
           ) : (
             eligibleDeliveries.map((d) => (
               <label key={d.id} className="checklist-item">
@@ -100,13 +100,14 @@ export default function RouteOptimizerPanel({
         onClick={handleOptimize}
         disabled={submitting || eligibleDeliveries.length === 0}
       >
-        {submitting ? "Optimizing…" : "Optimize route"}
+        {submitting ? "Оптимізація…" : "Оптимізувати маршрут"}
       </button>
 
       {route && (
         <div className="route-result">
           <h4>
-            Optimized route <span className="muted small">({formatKm(route.totalDistanceKm)} total)</span>
+            Оптимізований маршрут{" "}
+            <span className="muted small">(загалом {formatKm(route.totalDistanceKm)})</span>
           </h4>
           <ol className="stop-list">
             {route.stops
@@ -114,7 +115,9 @@ export default function RouteOptimizerPanel({
               .sort((a, b) => a.sequence - b.sequence)
               .map((stop) => (
                 <li key={stop.id} className="stop-item">
-                  <span className={`stop-kind ${stop.kind.toLowerCase()}`}>{stop.kind}</span>
+                  <span className={`stop-kind ${stop.kind.toLowerCase()}`}>
+                    {stop.kind === "PICKUP" ? "Забір" : "Доставка"}
+                  </span>
                   <span className="mono">#{stop.deliveryId.slice(0, 8)}</span>
                   <span className="muted small">{stop.etaAt ? formatDate(stop.etaAt) : ""}</span>
                 </li>

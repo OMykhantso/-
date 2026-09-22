@@ -20,7 +20,7 @@ export default function AssignPanel({
 
   async function handleAssign() {
     if (!deliveryId || !courierId) {
-      setError("Pick a delivery and a courier.");
+      setError("Оберіть доставку та кур'єра.");
       return;
     }
     setSubmitting(true);
@@ -31,7 +31,7 @@ export default function AssignPanel({
       setCourierId("");
       onAssigned();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Could not assign delivery");
+      setError(err instanceof ApiError ? `Помилка: ${err.message}` : "Не вдалося призначити доставку");
     } finally {
       setSubmitting(false);
     }
@@ -39,16 +39,16 @@ export default function AssignPanel({
 
   return (
     <div className="panel">
-      <h3>Assign a courier</h3>
+      <h3>Призначити кур'єра</h3>
       {unassigned.length === 0 ? (
-        <p className="muted">No unassigned deliveries right now.</p>
+        <p className="muted">Наразі немає непризначених доставок.</p>
       ) : (
         <div className="assign-form">
           <label className="field">
-            <span>Unassigned delivery</span>
+            <span>Непризначена доставка</span>
             <select value={deliveryId} onChange={(e) => setDeliveryId(e.target.value)}>
               <option value="" disabled>
-                Select delivery…
+                Оберіть доставку…
               </option>
               {unassigned.map((d) => (
                 <option key={d.id} value={d.id}>
@@ -58,10 +58,10 @@ export default function AssignPanel({
             </select>
           </label>
           <label className="field">
-            <span>Courier</span>
+            <span>Кур'єр</span>
             <select value={courierId} onChange={(e) => setCourierId(e.target.value)}>
               <option value="" disabled>
-                Select courier…
+                Оберіть кур'єра…
               </option>
               {couriers.map((c) => (
                 <option key={c.courierId} value={c.courierId}>
@@ -72,7 +72,7 @@ export default function AssignPanel({
           </label>
           {error && <div className="alert alert-error">{error}</div>}
           <button className="btn btn-primary" onClick={handleAssign} disabled={submitting}>
-            {submitting ? "Assigning…" : "Assign"}
+            {submitting ? "Призначення…" : "Призначити"}
           </button>
         </div>
       )}

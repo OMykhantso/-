@@ -27,7 +27,7 @@ export default function AddressField({ title, color, addresses, value, onSelect,
 
   async function handleCreate() {
     if (!label || !street || !city) {
-      setError("Fill in label, street and city.");
+      setError("Заповніть назву, вулицю та місто.");
       return;
     }
     setSaving(true);
@@ -40,7 +40,7 @@ export default function AddressField({ title, color, addresses, value, onSelect,
       setCity("");
       setMode("existing");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not save address");
+      setError(err instanceof Error ? `Помилка: ${err.message}` : "Не вдалося зберегти адресу");
     } finally {
       setSaving(false);
     }
@@ -57,14 +57,14 @@ export default function AddressField({ title, color, addresses, value, onSelect,
             onClick={() => setMode("existing")}
             disabled={addresses.length === 0}
           >
-            Saved
+            Збережена
           </button>
           <button
             type="button"
             className={mode === "new" ? "seg-btn active" : "seg-btn"}
             onClick={() => setMode("new")}
           >
-            New
+            Нова
           </button>
         </div>
       </div>
@@ -72,7 +72,7 @@ export default function AddressField({ title, color, addresses, value, onSelect,
       {mode === "existing" ? (
         <select value={value ?? ""} onChange={(e) => onSelect(e.target.value)}>
           <option value="" disabled>
-            Select an address…
+            Оберіть адресу…
           </option>
           {addresses.map((a) => (
             <option key={a.id} value={a.id}>
@@ -84,21 +84,21 @@ export default function AddressField({ title, color, addresses, value, onSelect,
         <div className="address-new">
           <div className="grid-2">
             <label className="field">
-              <span>Label</span>
-              <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Warehouse" />
+              <span>Назва</span>
+              <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Склад" />
             </label>
             <label className="field">
-              <span>City</span>
-              <input value={city} onChange={(e) => setCity(e.target.value)} placeholder="San Francisco" />
+              <span>Місто</span>
+              <input value={city} onChange={(e) => setCity(e.target.value)} placeholder="Київ" />
             </label>
           </div>
           <label className="field">
-            <span>Street</span>
-            <input value={street} onChange={(e) => setStreet(e.target.value)} placeholder="123 Main St" />
+            <span>Вулиця</span>
+            <input value={street} onChange={(e) => setStreet(e.target.value)} placeholder="вул. Хрещатик, 1" />
           </label>
           <div className="grid-2">
             <label className="field">
-              <span>Latitude</span>
+              <span>Широта</span>
               <input
                 type="number"
                 step="any"
@@ -107,7 +107,7 @@ export default function AddressField({ title, color, addresses, value, onSelect,
               />
             </label>
             <label className="field">
-              <span>Longitude</span>
+              <span>Довгота</span>
               <input
                 type="number"
                 step="any"
@@ -116,11 +116,11 @@ export default function AddressField({ title, color, addresses, value, onSelect,
               />
             </label>
           </div>
-          <p className="hint">Click or drag the pin to set the exact location.</p>
+          <p className="hint">Клацніть або перетягніть позначку, щоб задати точне місце.</p>
           <MapPicker lat={lat} lng={lng} color={color} onChange={(newLat, newLng) => { setLat(newLat); setLng(newLng); }} />
           {error && <div className="alert alert-error">{error}</div>}
           <button type="button" className="btn btn-secondary" onClick={handleCreate} disabled={saving}>
-            {saving ? "Saving…" : "Save address"}
+            {saving ? "Збереження…" : "Зберегти адресу"}
           </button>
         </div>
       )}

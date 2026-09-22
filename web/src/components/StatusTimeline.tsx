@@ -3,7 +3,7 @@ import { STATUS_LABEL, formatDate } from "../utils/format";
 
 export default function StatusTimeline({ history }: { history: StatusHistoryEntry[] }) {
   if (history.length === 0) {
-    return <p className="muted">No history yet.</p>;
+    return <p className="muted">Історії ще немає.</p>;
   }
   return (
     <ol className="timeline">

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Delivery, DeliveryStatus } from "../types";
 import StatusBadge from "./StatusBadge";
-import { formatDate } from "../utils/format";
+import { formatDate, STATUS_LABEL } from "../utils/format";
 
 const STATUS_OPTIONS: (DeliveryStatus | "ALL")[] = [
   "ALL",
@@ -29,11 +29,11 @@ export default function DeliveryTable({
   return (
     <div className="panel">
       <div className="panel-head">
-        <h3>All deliveries</h3>
+        <h3>Усі доставки</h3>
         <select value={filter} onChange={(e) => onFilterChange(e.target.value as DeliveryStatus | "ALL")}>
           {STATUS_OPTIONS.map((s) => (
             <option key={s} value={s}>
-              {s === "ALL" ? "All statuses" : s.replace("_", " ")}
+              {s === "ALL" ? "Усі статуси" : STATUS_LABEL[s]}
             </option>
           ))}
         </select>
@@ -43,19 +43,19 @@ export default function DeliveryTable({
           <thead>
             <tr>
               <th>ID</th>
-              <th>Client</th>
-              <th>Pickup</th>
-              <th>Dropoff</th>
-              <th>Courier</th>
-              <th>Status</th>
-              <th>Created</th>
+              <th>Клієнт</th>
+              <th>Звідки</th>
+              <th>Куди</th>
+              <th>Кур'єр</th>
+              <th>Статус</th>
+              <th>Створено</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 && (
               <tr>
                 <td colSpan={7} className="muted center">
-                  No deliveries match this filter.
+                  Немає доставок за цим фільтром.
                 </td>
               </tr>
             )}
@@ -71,7 +71,7 @@ export default function DeliveryTable({
                   <td>{d.client?.name ?? "—"}</td>
                   <td>{d.pickupAddress.label}</td>
                   <td>{d.dropoffAddress.label}</td>
-                  <td>{assignment?.courier?.name ?? <span className="muted">Unassigned</span>}</td>
+                  <td>{assignment?.courier?.name ?? <span className="muted">Не призначено</span>}</td>
                   <td>
                     <StatusBadge status={d.status} />
                   </td>

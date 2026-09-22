@@ -30,7 +30,7 @@ export default function FleetMap({ positions }: { positions: FleetPosition[] }) 
           <Popup>
             <strong>{p.courierName || p.courierId}</strong>
             <br />
-            {p.speedKmh != null ? `${p.speedKmh.toFixed(0)} km/h` : "speed n/a"}
+            {p.speedKmh != null ? `${p.speedKmh.toFixed(0)} км/год` : "швидкість н/д"}
             <br />
             {new Date(p.at).toLocaleTimeString()}
           </Popup>
