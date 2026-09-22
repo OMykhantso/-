@@ -72,7 +72,7 @@ courierRouter.get(
       where: { courierId: req.params.id },
       orderBy: { createdAt: "desc" },
     });
-    if (!location) throw notFound("No location reported yet for this courier");
+    if (!location) throw notFound("Цей кур'єр ще не передав своє місцезнаходження");
     res.json(location);
   })
 );

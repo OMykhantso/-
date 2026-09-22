@@ -34,8 +34,8 @@ deliveriesRouter.post(
       prisma.address.findFirst({ where: { id: body.pickupAddressId, ownerId: req.user!.sub } }),
       prisma.address.findFirst({ where: { id: body.dropoffAddressId, ownerId: req.user!.sub } }),
     ]);
-    if (!pickup) throw notFound("Pickup address not found");
-    if (!dropoff) throw notFound("Dropoff address not found");
+    if (!pickup) throw notFound("Адресу відправлення не знайдено");
+    if (!dropoff) throw notFound("Адресу призначення не знайдено");
 
     const delivery = await prisma.$transaction(async (tx) => {
       const created = await tx.delivery.create({
@@ -54,7 +54,7 @@ deliveriesRouter.post(
           deliveryId: created.id,
           status: DeliveryStatus.CREATED,
           changedById: req.user!.sub,
-          note: "Delivery request created",
+          note: "Заявку на доставку створено",
         },
       });
       return created;
@@ -117,7 +117,7 @@ deliveriesRouter.get(
       where: { id: req.params.id },
       include: { pickupAddress: true, dropoffAddress: true },
     });
-    if (!delivery) throw notFound("Delivery not found");
+    if (!delivery) throw notFound("Доставку не знайдено");
 
     const assignment = await getCurrentAssignment(delivery.id);
     if (!assignment || assignment.status === "REJECTED") {
@@ -151,20 +151,20 @@ deliveriesRouter.post(
   "/:id/cancel",
   asyncHandler(async (req, res) => {
     const delivery = await prisma.delivery.findUnique({ where: { id: req.params.id } });
-    if (!delivery) throw notFound("Delivery not found");
+    if (!delivery) throw notFound("Доставку не знайдено");
 
     if (req.user!.role === Role.CLIENT && delivery.clientId !== req.user!.sub) {
-      throw forbidden("Not your delivery");
+      throw forbidden("Це не ваша доставка");
     }
     if (req.user!.role !== Role.CLIENT && req.user!.role !== Role.DISPATCHER) {
-      throw forbidden("Only the client or a dispatcher can cancel a delivery");
+      throw forbidden("Скасувати доставку може лише клієнт або диспетчер");
     }
 
     const updated = await applyTransition({
       deliveryId: delivery.id,
       to: DeliveryStatus.CANCELLED,
       changedById: req.user!.sub,
-      note: "Cancelled",
+      note: "Скасовано",
     });
 
     emitToDispatchers("delivery:statusChanged", { deliveryId: updated.id, status: updated.status });
@@ -182,18 +182,18 @@ deliveriesRouter.post(
     const body = assignSchema.parse(req.body);
 
     const courier = await prisma.user.findFirst({ where: { id: body.courierId, role: Role.COURIER } });
-    if (!courier) throw notFound("Courier not found");
+    if (!courier) throw notFound("Кур'єра не знайдено");
 
     const updated = await prisma.$transaction(async (tx) => {
       const delivery = await tx.delivery.findUnique({ where: { id: req.params.id } });
-      if (!delivery) throw notFound("Delivery not found");
+      if (!delivery) throw notFound("Доставку не знайдено");
 
       const result = await applyTransitionInTx(tx, {
         deliveryId: delivery.id,
         from: delivery.status,
         to: DeliveryStatus.ASSIGNED,
         changedById: req.user!.sub,
-        note: `Assigned to ${courier.name}`,
+        note: `Призначено кур'єра ${courier.name}`,
       });
 
       await tx.courierAssignment.create({
@@ -226,11 +226,11 @@ deliveriesRouter.post(
 
     const assignment = await getCurrentAssignment(deliveryId);
     if (!assignment || assignment.courierId !== req.user!.sub) {
-      throw forbidden("This delivery is not assigned to you");
+      throw forbidden("Цю доставку не призначено вам");
     }
 
     const delivery = await prisma.delivery.findUnique({ where: { id: deliveryId } });
-    if (!delivery) throw notFound("Delivery not found");
+    if (!delivery) throw notFound("Доставку не знайдено");
 
     let updated;
     switch (body.action) {
@@ -251,7 +251,7 @@ deliveriesRouter.post(
           deliveryId,
           to: DeliveryStatus.CREATED,
           changedById: req.user!.sub,
-          note: body.note ?? "Courier rejected assignment",
+          note: body.note ?? "Кур'єр відхилив призначення",
         });
         emitToDispatchers("delivery:statusChanged", { deliveryId, status: updated.status });
         break;
@@ -283,7 +283,7 @@ deliveriesRouter.post(
           deliveryId,
           to: DeliveryStatus.FAILED,
           changedById: req.user!.sub,
-          note: body.note ?? "Delivery failed",
+          note: body.note ?? "Доставку не вдалося виконати",
           lat: body.lat,
           lng: body.lng,
         });
@@ -313,19 +313,19 @@ deliveriesRouter.post(
 
     const assignment = await getCurrentAssignment(deliveryId);
     if (!assignment || assignment.courierId !== req.user!.sub) {
-      throw forbidden("This delivery is not assigned to you");
+      throw forbidden("Цю доставку не призначено вам");
     }
 
     const updated = await prisma.$transaction(async (tx) => {
       const delivery = await tx.delivery.findUnique({ where: { id: deliveryId } });
-      if (!delivery) throw notFound("Delivery not found");
+      if (!delivery) throw notFound("Доставку не знайдено");
 
       await applyTransitionInTx(tx, {
         deliveryId,
         from: delivery.status,
         to: DeliveryStatus.DELIVERED,
         changedById: req.user!.sub,
-        note: body.note ?? "Delivered with proof",
+        note: body.note ?? "Доставлено з підтвердженням",
         lat: body.lat,
         lng: body.lng,
       });
@@ -363,11 +363,11 @@ async function loadDeliveryForUser(id: string, userId: string, role: Role) {
       routeStops: true,
     },
   });
-  if (!delivery) throw notFound("Delivery not found");
+  if (!delivery) throw notFound("Доставку не знайдено");
 
   const currentAssignment = delivery.assignments[0];
-  if (role === Role.CLIENT && delivery.clientId !== userId) throw forbidden("Not your delivery");
-  if (role === Role.COURIER && currentAssignment?.courierId !== userId) throw forbidden("Not assigned to you");
+  if (role === Role.CLIENT && delivery.clientId !== userId) throw forbidden("Це не ваша доставка");
+  if (role === Role.COURIER && currentAssignment?.courierId !== userId) throw forbidden("Не призначено вам");
 
   return delivery;
 }

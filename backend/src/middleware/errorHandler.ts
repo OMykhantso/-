@@ -18,7 +18,7 @@ export function errorHandler(
   _next: NextFunction
 ) {
   if (err instanceof ZodError) {
-    return res.status(400).json({ error: "Validation failed", details: err.flatten() });
+    return res.status(400).json({ error: "Помилка валідації даних", details: err.flatten() });
   }
   if (err instanceof InvalidTransitionError) {
     return res.status(409).json({ error: err.message });
@@ -31,7 +31,7 @@ export function errorHandler(
   }
 
   console.error(err);
-  return res.status(500).json({ error: "Internal server error" });
+  return res.status(500).json({ error: "Внутрішня помилка сервера" });
 }
 
 export function notFound(message: string): Error {

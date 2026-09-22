@@ -31,7 +31,7 @@ routesRouter.post(
       include: { pickupAddress: true, dropoffAddress: true },
     });
     if (deliveries.length !== body.deliveryIds.length) {
-      throw notFound("One or more deliveries are not assigned to this courier");
+      throw notFound("Одну або кілька доставок не призначено цьому кур'єру");
     }
 
     const lastLocation = await prisma.courierLocation.findFirst({
@@ -101,7 +101,7 @@ routesRouter.get(
   "/active/:courierId",
   asyncHandler(async (req, res) => {
     if (req.user!.role === Role.COURIER && req.user!.sub !== req.params.courierId) {
-      throw forbidden("Not your route");
+      throw forbidden("Це не ваш маршрут");
     }
 
     const route = await prisma.route.findFirst({
@@ -122,8 +122,8 @@ routesRouter.post(
       where: { id: req.params.stopId },
       include: { route: true },
     });
-    if (!stop) throw notFound("Stop not found");
-    if (stop.route.courierId !== req.user!.sub) throw forbidden("Not your route");
+    if (!stop) throw notFound("Зупинку не знайдено");
+    if (stop.route.courierId !== req.user!.sub) throw forbidden("Це не ваш маршрут");
 
     const updated = await prisma.routeStop.update({
       where: { id: stop.id },

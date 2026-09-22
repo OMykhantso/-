@@ -24,7 +24,7 @@ export const ALLOWED_TRANSITIONS: Record<DeliveryStatus, DeliveryStatus[]> = {
 
 export class InvalidTransitionError extends Error {
   constructor(from: DeliveryStatus, to: DeliveryStatus) {
-    super(`Cannot transition delivery from ${from} to ${to}`);
+    super(`Неможливо змінити статус доставки з "${from}" на "${to}"`);
     this.name = "InvalidTransitionError";
   }
 }
@@ -85,7 +85,7 @@ export async function applyTransition(input: ApplyTransitionInput) {
       where: { id: input.deliveryId },
     });
     if (!delivery) {
-      const err = new Error("Delivery not found");
+      const err = new Error("Доставку не знайдено");
       err.name = "NotFoundError";
       throw err;
     }

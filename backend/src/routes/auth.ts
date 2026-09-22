@@ -24,7 +24,7 @@ authRouter.post(
 
     const existing = await prisma.user.findUnique({ where: { email: body.email } });
     if (existing) {
-      return res.status(409).json({ error: "Email already registered" });
+      return res.status(409).json({ error: "Ця електронна пошта вже зареєстрована" });
     }
 
     const passwordHash = await bcrypt.hash(body.password, 10);
@@ -54,10 +54,10 @@ authRouter.post(
     const body = loginSchema.parse(req.body);
 
     const user = await prisma.user.findUnique({ where: { email: body.email } });
-    if (!user) return res.status(401).json({ error: "Invalid credentials" });
+    if (!user) return res.status(401).json({ error: "Невірний email або пароль" });
 
     const valid = await bcrypt.compare(body.password, user.passwordHash);
-    if (!valid) return res.status(401).json({ error: "Invalid credentials" });
+    if (!valid) return res.status(401).json({ error: "Невірний email або пароль" });
 
     const token = signToken({ sub: user.id, role: user.role, email: user.email });
     res.json({ token, user: toPublicUser(user) });
@@ -69,7 +69,7 @@ authRouter.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const user = await prisma.user.findUnique({ where: { id: req.user!.sub } });
-    if (!user) return res.status(404).json({ error: "User not found" });
+    if (!user) return res.status(404).json({ error: "Користувача не знайдено" });
     res.json(toPublicUser(user));
   })
 );
