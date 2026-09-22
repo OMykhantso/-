@@ -83,6 +83,7 @@ deliveriesRouter.get(
       include: {
         pickupAddress: true,
         dropoffAddress: true,
+        client: { select: { id: true, name: true, phone: true } },
         assignments: {
           orderBy: { assignedAt: "desc" },
           take: 1,

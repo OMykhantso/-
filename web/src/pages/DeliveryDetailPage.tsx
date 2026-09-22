@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Delivery, EtaResponse } from "../types";
 import { cancelDelivery, getDelivery, getEta } from "../api/deliveries";
 import { useSocket } from "../context/SocketContext";
+import { useAuth } from "../context/AuthContext";
 import StatusBadge from "../components/StatusBadge";
 import StatusTimeline from "../components/StatusTimeline";
 import DeliveryTrackingMap from "../components/DeliveryTrackingMap";
@@ -13,6 +14,8 @@ export default function DeliveryDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { socket } = useSocket();
+  const { user } = useAuth();
+  const basePath = user?.role === "DISPATCHER" ? "/dispatcher" : "/client";
   const [delivery, setDelivery] = useState<Delivery | null>(null);
   const [eta, setEta] = useState<EtaResponse | null>(null);
   const [courierPos, setCourierPos] = useState<{ lat: number; lng: number } | null>(null);
@@ -92,7 +95,7 @@ export default function DeliveryDetailPage() {
     return (
       <div className="page">
         <p>Delivery not found.</p>
-        <Link to="/client">Back to deliveries</Link>
+        <Link to={basePath}>Back to deliveries</Link>
       </div>
     );
   }
@@ -104,8 +107,8 @@ export default function DeliveryDetailPage() {
     <div className="page">
       <div className="page-header">
         <div>
-          <Link to="/client" className="back-link">
-            ← My deliveries
+          <Link to={basePath} className="back-link">
+            {user?.role === "DISPATCHER" ? "← All deliveries" : "← My deliveries"}
           </Link>
           <h1>Delivery #{delivery.id.slice(0, 8)}</h1>
         </div>
