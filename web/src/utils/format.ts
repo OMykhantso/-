@@ -1,23 +1,29 @@
-import { DeliveryStatus } from "../types";
+import { DeliveryStatus, Role } from "../types";
+
+export const ROLE_LABEL: Record<Role, string> = {
+  CLIENT: "Клієнт",
+  COURIER: "Кур'єр",
+  DISPATCHER: "Диспетчер",
+};
 
 export const STATUS_LABEL: Record<DeliveryStatus, string> = {
-  CREATED: "Created",
-  ASSIGNED: "Assigned",
-  PICKED_UP: "Picked up",
-  IN_TRANSIT: "In transit",
-  DELIVERED: "Delivered",
-  FAILED: "Failed",
-  CANCELLED: "Cancelled",
+  CREATED: "Нове",
+  ASSIGNED: "Призначено",
+  PICKED_UP: "Забрано",
+  IN_TRANSIT: "В дорозі",
+  DELIVERED: "Доставлено",
+  FAILED: "Не вдалося",
+  CANCELLED: "Скасовано",
 };
 
 export const STATUS_COLOR: Record<DeliveryStatus, string> = {
-  CREATED: "#64748b",
+  CREATED: "#2563eb",
   ASSIGNED: "#2563eb",
-  PICKED_UP: "#7c3aed",
-  IN_TRANSIT: "#d97706",
-  DELIVERED: "#16a34a",
-  FAILED: "#dc2626",
-  CANCELLED: "#94a3b8",
+  PICKED_UP: "#f59e0b",
+  IN_TRANSIT: "#f59e0b",
+  DELIVERED: "#10b981",
+  FAILED: "#ef4444",
+  CANCELLED: "#ef4444",
 };
 
 export function formatDate(input: string | null | undefined): string {
@@ -34,13 +40,13 @@ export function formatDate(input: string | null | undefined): string {
 
 export function formatMinutes(mins: number | null | undefined): string {
   if (mins === null || mins === undefined) return "—";
-  if (mins < 60) return `${Math.round(mins)} min`;
+  if (mins < 60) return `${Math.round(mins)} хв`;
   const h = Math.floor(mins / 60);
   const m = Math.round(mins % 60);
-  return `${h}h ${m}m`;
+  return `${h} год ${m} хв`;
 }
 
 export function formatKm(km: number | null | undefined): string {
   if (km === null || km === undefined) return "—";
-  return `${km.toFixed(1)} km`;
+  return `${km.toFixed(1)} км`;
 }

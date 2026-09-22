@@ -34,7 +34,7 @@ export default function DeliveryDetailScreen() {
       const detail = await deliveriesApi.getDelivery(token, id);
       setDelivery(detail);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load this delivery.");
+      setError(err instanceof Error ? `Помилка: ${err.message}` : "Не вдалося завантажити доставку.");
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ export default function DeliveryDetailScreen() {
         });
         await Promise.all([load(), refetchList()]);
       } catch (err) {
-        Alert.alert("Action failed", err instanceof Error ? err.message : "Please try again.");
+        Alert.alert("Дію не виконано", err instanceof Error ? err.message : "Спробуйте ще раз.");
       } finally {
         setActionInFlight(null);
       }
@@ -117,7 +117,7 @@ export default function DeliveryDetailScreen() {
   if (error || !delivery) {
     return (
       <View style={styles.center}>
-        <Text style={styles.error}>{error ?? "Delivery not found."}</Text>
+        <Text style={styles.error}>{error ?? "Доставку не знайдено."}</Text>
       </View>
     );
   }
@@ -134,34 +134,34 @@ export default function DeliveryDetailScreen() {
         <MapView style={styles.map} initialRegion={region} region={region}>
           <Marker
             coordinate={{ latitude: delivery.pickupAddress.lat, longitude: delivery.pickupAddress.lng }}
-            title="Pickup"
+            title="Звідки"
             description={delivery.pickupAddress.street}
             pinColor="#2563EB"
           />
           <Marker
             coordinate={{ latitude: delivery.dropoffAddress.lat, longitude: delivery.dropoffAddress.lng }}
-            title="Dropoff"
+            title="Куди"
             description={delivery.dropoffAddress.street}
-            pinColor="#DC2626"
+            pinColor="#EF4444"
           />
           {courierCoords ? (
             <Marker
               coordinate={{ latitude: courierCoords.lat, longitude: courierCoords.lng }}
-              title="You"
-              pinColor="#15803D"
+              title="Ви"
+              pinColor="#10B981"
             />
           ) : null}
         </MapView>
       ) : null}
 
-      <Section title="Pickup">
+      <Section title="Звідки">
         <Text style={styles.address}>{delivery.pickupAddress.label}</Text>
         <Text style={styles.addressDetail}>
           {delivery.pickupAddress.street}, {delivery.pickupAddress.city}
         </Text>
       </Section>
 
-      <Section title="Dropoff">
+      <Section title="Куди">
         <Text style={styles.address}>{delivery.dropoffAddress.label}</Text>
         <Text style={styles.addressDetail}>
           {delivery.dropoffAddress.street}, {delivery.dropoffAddress.city}
@@ -169,13 +169,13 @@ export default function DeliveryDetailScreen() {
       </Section>
 
       {delivery.description ? (
-        <Section title="Package">
+        <Section title="Посилка">
           <Text style={styles.addressDetail}>{delivery.description}</Text>
-          {delivery.weightKg ? <Text style={styles.addressDetail}>{delivery.weightKg} kg</Text> : null}
+          {delivery.weightKg ? <Text style={styles.addressDetail}>{delivery.weightKg} кг</Text> : null}
         </Section>
       ) : null}
 
-      <Section title="Client">
+      <Section title="Клієнт">
         <Text style={styles.addressDetail}>{delivery.client.name}</Text>
         {delivery.client.phone ? <Text style={styles.addressDetail}>{delivery.client.phone}</Text> : null}
       </Section>

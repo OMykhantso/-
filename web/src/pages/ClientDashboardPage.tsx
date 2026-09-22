@@ -41,11 +41,11 @@ export default function ClientDashboardPage() {
     <div className="page">
       <div className="page-header">
         <div>
-          <h1>My deliveries</h1>
-          <p className="muted">Request a delivery and track it in real time.</p>
+          <h1>Мої доставки</h1>
+          <p className="muted">Замовте доставку та відстежуйте її в реальному часі.</p>
         </div>
         <button className="btn btn-primary" onClick={() => setShowForm((s) => !s)}>
-          {showForm ? "Close" : "New delivery"}
+          {showForm ? "Закрити" : "Нова доставка"}
         </button>
       </div>
 
@@ -66,7 +66,7 @@ export default function ClientDashboardPage() {
         </div>
       ) : deliveries.length === 0 ? (
         <div className="empty-state">
-          <p>No deliveries yet.</p>
+          <p>Ще немає доставок.</p>
         </div>
       ) : (
         <div className="card-grid">
@@ -116,11 +116,11 @@ function NewDeliveryForm({
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!pickupAddressId || !dropoffAddressId) {
-      setError("Choose both a pickup and a dropoff address.");
+      setError("Оберіть адресу відправлення та адресу призначення.");
       return;
     }
     if (pickupAddressId === dropoffAddressId) {
-      setError("Pickup and dropoff must be different addresses.");
+      setError("Адреса відправлення та адреса призначення мають відрізнятися.");
       return;
     }
     setSubmitting(true);
@@ -135,7 +135,7 @@ function NewDeliveryForm({
       });
       onCreated();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Could not create delivery");
+      setError(err instanceof ApiError ? `Помилка: ${err.message}` : "Не вдалося створити доставку");
     } finally {
       setSubmitting(false);
     }
@@ -145,7 +145,7 @@ function NewDeliveryForm({
     <form className="panel form" onSubmit={handleSubmit}>
       <div className="grid-2">
         <AddressField
-          title="Pickup address"
+          title="Звідки (адреса відправлення)"
           color="green"
           addresses={addresses}
           value={pickupAddressId}
@@ -156,7 +156,7 @@ function NewDeliveryForm({
           }}
         />
         <AddressField
-          title="Dropoff address"
+          title="Куди (адреса призначення)"
           color="red"
           addresses={addresses}
           value={dropoffAddressId}
@@ -169,26 +169,26 @@ function NewDeliveryForm({
       </div>
       <div className="grid-3">
         <label className="field">
-          <span>Description</span>
-          <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Box of books" />
+          <span>Опис</span>
+          <input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Коробка книжок" />
         </label>
         <label className="field">
-          <span>Weight (kg)</span>
+          <span>Вага (кг)</span>
           <input type="number" step="any" value={weightKg} onChange={(e) => setWeightKg(e.target.value)} />
         </label>
         <label className="field">
-          <span>Package size</span>
+          <span>Розмір посилки</span>
           <select value={packageSize} onChange={(e) => setPackageSize(e.target.value)}>
             <option value="">—</option>
-            <option value="SMALL">Small</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="LARGE">Large</option>
+            <option value="SMALL">S — маленька</option>
+            <option value="MEDIUM">M — середня</option>
+            <option value="LARGE">L — велика</option>
           </select>
         </label>
       </div>
       {error && <div className="alert alert-error">{error}</div>}
       <button className="btn btn-primary" type="submit" disabled={submitting}>
-        {submitting ? "Requesting…" : "Request delivery"}
+        {submitting ? "Оформлення…" : "Замовити доставку"}
       </button>
     </form>
   );

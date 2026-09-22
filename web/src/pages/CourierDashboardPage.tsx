@@ -34,9 +34,10 @@ export default function CourierDashboardPage() {
     <div className="page">
       <div className="page-header">
         <div>
-          <h1>My deliveries</h1>
+          <h1>Мої доставки</h1>
           <p className="muted">
-            Read-only overview. Use the courier mobile app to accept, update, and complete deliveries.
+            Огляд лише для перегляду. Використовуйте мобільний застосунок кур'єра, щоб приймати, оновлювати та
+            завершувати доставки.
           </p>
         </div>
       </div>

@@ -71,18 +71,18 @@ export default function HomeScreen() {
     >
       <View style={styles.headerRow}>
         <View>
-          <Text style={styles.greeting}>Hi, {user?.name?.split(" ")[0] ?? "Courier"}</Text>
+          <Text style={styles.greeting}>Привіт, {user?.name?.split(" ")[0] ?? "Кур'єр"}</Text>
           <Text style={styles.subGreeting}>
-            {route ? `Route with ${route.stops.length} stops` : "No optimized route yet"}
+            {route ? `Маршрут з ${route.stops.length} зупинками` : "Оптимізованого маршруту ще немає"}
           </Text>
         </View>
       </View>
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? <Text style={styles.error}>Помилка: {error}</Text> : null}
 
-      <Text style={styles.sectionTitle}>Active ({active.length})</Text>
+      <Text style={styles.sectionTitle}>Активні ({active.length})</Text>
       {active.length === 0 ? (
-        <Text style={styles.empty}>No active deliveries right now.</Text>
+        <Text style={styles.empty}>Наразі активних доставок немає.</Text>
       ) : (
         active.map((delivery) => {
           const stop = route ? findRelevantStop(route.stops, delivery) : undefined;
@@ -100,7 +100,7 @@ export default function HomeScreen() {
 
       {other.length > 0 ? (
         <>
-          <Text style={styles.sectionTitle}>Needs Attention ({other.length})</Text>
+          <Text style={styles.sectionTitle}>Потребує уваги ({other.length})</Text>
           {other.map((delivery) => (
             <DeliveryCard
               key={delivery.id}
@@ -113,7 +113,7 @@ export default function HomeScreen() {
 
       {completed.length > 0 ? (
         <>
-          <Text style={styles.sectionTitle}>Completed ({completed.length})</Text>
+          <Text style={styles.sectionTitle}>Завершені ({completed.length})</Text>
           {completed.map((delivery) => (
             <DeliveryCard
               key={delivery.id}
@@ -125,33 +125,34 @@ export default function HomeScreen() {
       ) : null}
 
       <View style={styles.logoutWrapper}>
-        <ActionButton label="Sign Out" variant="outline" onPress={() => logout()} />
+        <ActionButton label="Вийти" variant="outline" onPress={() => logout()} />
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F9FAFB" },
-  content: { padding: 16, paddingBottom: 40 },
-  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F9FAFB" },
+  container: { flex: 1, backgroundColor: "#F8FAFC" },
+  content: { padding: 16, paddingBottom: 48 },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8FAFC" },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 20,
   },
-  greeting: { fontSize: 22, fontWeight: "800", color: "#111827" },
-  subGreeting: { fontSize: 13, color: "#6B7280", marginTop: 2 },
+  greeting: { fontSize: 24, fontWeight: "800", color: "#0F172A", letterSpacing: 0.2 },
+  subGreeting: { fontSize: 13, color: "#64748B", marginTop: 4 },
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "700",
-    color: "#374151",
-    marginTop: 20,
-    marginBottom: 10,
+    color: "#64748B",
+    marginTop: 24,
+    marginBottom: 12,
     textTransform: "uppercase",
+    letterSpacing: 0.4,
   },
-  empty: { color: "#9CA3AF", fontSize: 13, marginBottom: 8 },
-  error: { color: "#DC2626", fontSize: 13, marginBottom: 12 },
+  empty: { color: "#94A3B8", fontSize: 13, marginBottom: 8 },
+  error: { color: "#EF4444", fontSize: 13, marginBottom: 12 },
   logoutWrapper: { marginTop: 32 },
 });

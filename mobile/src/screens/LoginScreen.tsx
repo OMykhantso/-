@@ -22,7 +22,7 @@ export default function LoginScreen() {
 
   const onSubmit = async () => {
     if (!email.trim() || !password) {
-      setError("Enter your email and password.");
+      setError("Введіть електронну пошту та пароль.");
       return;
     }
     setSubmitting(true);
@@ -31,7 +31,7 @@ export default function LoginScreen() {
       await login(email.trim(), password);
       router.replace("/home");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not sign in.");
+      setError(err instanceof Error ? `Помилка: ${err.message}` : "Не вдалося увійти.");
     } finally {
       setSubmitting(false);
     }
@@ -43,11 +43,11 @@ export default function LoginScreen() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <View style={styles.container}>
-        <Text style={styles.title}>Courier Sign In</Text>
-        <Text style={styles.subtitle}>Delivery Management System</Text>
+        <Text style={styles.title}>Вхід кур'єра</Text>
+        <Text style={styles.subtitle}>Система управління доставками</Text>
 
         <View style={styles.form}>
-          <Text style={styles.label}>Email</Text>
+          <Text style={styles.label}>Електронна пошта</Text>
           <TextInput
             style={styles.input}
             value={email}
@@ -56,16 +56,18 @@ export default function LoginScreen() {
             autoCorrect={false}
             keyboardType="email-address"
             placeholder="courier@example.com"
+            placeholderTextColor="#94A3B8"
             editable={!submitting}
           />
 
-          <Text style={styles.label}>Password</Text>
+          <Text style={styles.label}>Пароль</Text>
           <TextInput
             style={styles.input}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
             placeholder="••••••••"
+            placeholderTextColor="#94A3B8"
             editable={!submitting}
           />
 
@@ -73,14 +75,14 @@ export default function LoginScreen() {
 
           <View style={styles.buttonWrapper}>
             {submitting ? (
-              <ActivityIndicator />
+              <ActivityIndicator color="#2563EB" />
             ) : (
-              <ActionButton label="Sign In" onPress={onSubmit} disabled={submitting} />
+              <ActionButton label="Увійти" onPress={onSubmit} disabled={submitting} />
             )}
           </View>
         </View>
 
-        <Text style={styles.footnote}>Courier accounts only. Ask your dispatcher for access.</Text>
+        <Text style={styles.footnote}>Лише для кур'єрів. Зверніться до диспетчера для доступу.</Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -92,55 +94,62 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: 24,
-    backgroundColor: "#F9FAFB",
+    backgroundColor: "#F8FAFC",
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: "800",
-    color: "#111827",
+    color: "#0F172A",
     textAlign: "center",
+    letterSpacing: 0.2,
   },
   subtitle: {
     fontSize: 14,
-    color: "#6B7280",
+    color: "#64748B",
     textAlign: "center",
-    marginTop: 4,
+    marginTop: 6,
     marginBottom: 32,
   },
   form: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    padding: 20,
+    borderRadius: 16,
+    padding: 24,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#E2E8F0",
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 24,
+    elevation: 3,
   },
   label: {
     fontSize: 13,
     fontWeight: "600",
-    color: "#374151",
-    marginBottom: 6,
-    marginTop: 12,
+    color: "#334155",
+    marginBottom: 8,
+    marginTop: 16,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    borderColor: "#E2E8F0",
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     fontSize: 15,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F8FAFC",
+    color: "#0F172A",
   },
   error: {
-    color: "#DC2626",
+    color: "#EF4444",
     fontSize: 13,
-    marginTop: 14,
+    marginTop: 16,
   },
   buttonWrapper: {
-    marginTop: 20,
+    marginTop: 24,
   },
   footnote: {
     textAlign: "center",
-    color: "#9CA3AF",
+    color: "#94A3B8",
     fontSize: 12,
     marginTop: 24,
   },

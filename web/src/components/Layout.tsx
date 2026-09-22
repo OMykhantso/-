@@ -1,6 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useSocket } from "../context/SocketContext";
+import { ROLE_LABEL } from "../utils/format";
 
 export default function Layout() {
   const { user, logout } = useAuth();
@@ -20,24 +21,24 @@ export default function Layout() {
       <header className="topbar">
         <div className="topbar-inner">
           <NavLink to={homePath} className="brand">
-            <span className="brand-mark">DMS</span>
-            <span className="brand-name">Delivery Management</span>
+            <span className="brand-mark">ШД</span>
+            <span className="brand-name">Швидка Доставка</span>
           </NavLink>
           <div className="topbar-right">
             <span className={`conn-pill ${connected ? "conn-on" : "conn-off"}`}>
-              <span className="conn-dot" /> {connected ? "Live" : "Offline"}
+              <span className="conn-dot" /> {connected ? "На зв'язку" : "Немає зв'язку"}
             </span>
             {user && (
               <div className="user-chip">
                 <div className="user-avatar">{user.name.slice(0, 1).toUpperCase()}</div>
                 <div className="user-meta">
                   <span className="user-name">{user.name}</span>
-                  <span className="user-role">{user.role}</span>
+                  <span className="user-role">{ROLE_LABEL[user.role]}</span>
                 </div>
               </div>
             )}
             <button className="btn btn-ghost" onClick={handleLogout}>
-              Log out
+              Вийти
             </button>
           </div>
         </div>

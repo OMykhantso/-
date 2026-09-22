@@ -25,11 +25,11 @@ export default function Banner({ message, onDismiss, durationMs = 4000 }: Banner
 
 const styles = StyleSheet.create({
   banner: {
-    backgroundColor: "#111827",
+    backgroundColor: "#0F172A",
     color: "#FFFFFF",
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 12,
     fontSize: 13,
-    fontWeight: "500",
+    fontWeight: "600",
   },
 });

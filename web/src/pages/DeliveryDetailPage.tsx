@@ -77,7 +77,7 @@ export default function DeliveryDetailPage() {
       const updated = await cancelDelivery(delivery.id);
       setDelivery((prev) => (prev ? { ...prev, status: updated.status } : prev));
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Could not cancel delivery");
+      setError(err instanceof ApiError ? `Помилка: ${err.message}` : "Не вдалося скасувати доставку");
     } finally {
       setCancelling(false);
     }
@@ -94,8 +94,8 @@ export default function DeliveryDetailPage() {
   if (!delivery) {
     return (
       <div className="page">
-        <p>Delivery not found.</p>
-        <Link to={basePath}>Back to deliveries</Link>
+        <p>Доставку не знайдено.</p>
+        <Link to={basePath}>Назад до доставок</Link>
       </div>
     );
   }
@@ -108,9 +108,9 @@ export default function DeliveryDetailPage() {
       <div className="page-header">
         <div>
           <Link to={basePath} className="back-link">
-            {user?.role === "DISPATCHER" ? "← All deliveries" : "← My deliveries"}
+            {user?.role === "DISPATCHER" ? "← Усі доставки" : "← Мої доставки"}
           </Link>
-          <h1>Delivery #{delivery.id.slice(0, 8)}</h1>
+          <h1>Доставка №{delivery.id.slice(0, 8)}</h1>
         </div>
         <StatusBadge status={delivery.status} />
       </div>
@@ -125,41 +125,41 @@ export default function DeliveryDetailPage() {
         </div>
 
         <div className="panel">
-          <h3>Delivery info</h3>
+          <h3>Інформація про доставку</h3>
           <dl className="kv">
-            <dt>Pickup</dt>
+            <dt>Звідки</dt>
             <dd>
               {delivery.pickupAddress.label} — {delivery.pickupAddress.street}, {delivery.pickupAddress.city}
             </dd>
-            <dt>Dropoff</dt>
+            <dt>Куди</dt>
             <dd>
               {delivery.dropoffAddress.label} — {delivery.dropoffAddress.street}, {delivery.dropoffAddress.city}
             </dd>
             {delivery.description && (
               <>
-                <dt>Description</dt>
+                <dt>Опис</dt>
                 <dd>{delivery.description}</dd>
               </>
             )}
             {currentAssignment?.courier && (
               <>
-                <dt>Courier</dt>
+                <dt>Кур'єр</dt>
                 <dd>
                   {currentAssignment.courier.name}
                   {currentAssignment.courier.phone ? ` · ${currentAssignment.courier.phone}` : ""}
                 </dd>
               </>
             )}
-            <dt>Created</dt>
+            <dt>Створено</dt>
             <dd>{formatDate(delivery.createdAt)}</dd>
           </dl>
 
           <div className="eta-box">
-            <span className="eta-label">Estimated arrival</span>
-            <span className="eta-value">{eta?.etaAt ? formatDate(eta.etaAt) : "Not available yet"}</span>
+            <span className="eta-label">Орієнтовний час прибуття</span>
+            <span className="eta-value">{eta?.etaAt ? formatDate(eta.etaAt) : "Ще не доступно"}</span>
             {eta?.remainingKm != null && (
               <span className="muted small">
-                {formatKm(eta.remainingKm)} · {formatMinutes(eta.remainingMinutes)} remaining
+                Залишилось: {formatKm(eta.remainingKm)} · {formatMinutes(eta.remainingMinutes)}
               </span>
             )}
           </div>
@@ -167,12 +167,12 @@ export default function DeliveryDetailPage() {
           {error && <div className="alert alert-error">{error}</div>}
 
           <button className="btn btn-danger btn-block" disabled={!canCancel || cancelling} onClick={handleCancel}>
-            {cancelling ? "Cancelling…" : "Cancel delivery"}
+            {cancelling ? "Скасування…" : "Скасувати доставку"}
           </button>
         </div>
 
         <div className="panel">
-          <h3>Status history</h3>
+          <h3>Історія статусів</h3>
           <StatusTimeline history={delivery.statusHistory ?? []} />
         </div>
       </div>

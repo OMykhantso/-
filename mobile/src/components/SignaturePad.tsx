@@ -56,7 +56,7 @@ const SignaturePad = forwardRef<SignaturePadHandle, SignaturePadProps>(({ height
       },
       isEmpty: () => paths.length === 0,
       capture: async () => {
-        if (!viewShotRef.current) throw new Error("Signature pad is not ready yet.");
+        if (!viewShotRef.current) throw new Error("Поле для підпису ще не готове.");
         return captureRef(viewShotRef, { result: "base64", format: "png", quality: 1 });
       },
     }),
@@ -95,7 +95,7 @@ const SignaturePad = forwardRef<SignaturePadHandle, SignaturePadProps>(({ height
         </View>
         {isEmpty ? (
           <View style={styles.hint} pointerEvents="none">
-            <Text style={styles.hintText}>Sign here</Text>
+            <Text style={styles.hintText}>Поставте підпис тут</Text>
           </View>
         ) : null}
       </ViewShot>
@@ -112,10 +112,15 @@ const styles = StyleSheet.create({
   canvas: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 8,
+    borderColor: "#E2E8F0",
+    borderRadius: 16,
     backgroundColor: "#FFFFFF",
     overflow: "hidden",
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 2,
+    elevation: 1,
   },
   hint: {
     ...StyleSheet.absoluteFill,
@@ -123,8 +128,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   hintText: {
-    color: "#9CA3AF",
+    color: "#94A3B8",
     fontSize: 16,
+    fontWeight: "500",
   },
 });
 

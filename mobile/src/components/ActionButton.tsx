@@ -11,11 +11,14 @@ interface ActionButtonProps {
   loading?: boolean;
 }
 
-const VARIANT_STYLES: Record<Variant, { bg: string; text: string; border?: string }> = {
-  primary: { bg: "#2563EB", text: "#FFFFFF" },
-  danger: { bg: "#DC2626", text: "#FFFFFF" },
-  secondary: { bg: "#111827", text: "#FFFFFF" },
-  outline: { bg: "transparent", text: "#2563EB", border: "#2563EB" },
+const VARIANT_STYLES: Record<
+  Variant,
+  { bg: string; text: string; border?: string; pressedBg: string }
+> = {
+  primary: { bg: "#2563EB", pressedBg: "#1D4ED8", text: "#FFFFFF" },
+  danger: { bg: "#EF4444", pressedBg: "#DC2626", text: "#FFFFFF" },
+  secondary: { bg: "#0F172A", pressedBg: "#1E293B", text: "#FFFFFF" },
+  outline: { bg: "transparent", pressedBg: "#EFF6FF", text: "#2563EB", border: "#2563EB" },
 };
 
 export default function ActionButton({
@@ -35,9 +38,10 @@ export default function ActionButton({
       style={({ pressed }) => [
         styles.base,
         {
-          backgroundColor: colors.bg,
+          backgroundColor: pressed && !isDisabled ? colors.pressedBg : colors.bg,
           borderColor: colors.border ?? colors.bg,
-          opacity: isDisabled ? 0.5 : pressed ? 0.85 : 1,
+          opacity: isDisabled ? 0.5 : 1,
+          transform: [{ scale: pressed && !isDisabled ? 0.98 : 1 }],
         },
       ]}
     >
@@ -54,12 +58,14 @@ const styles = StyleSheet.create({
   base: {
     borderWidth: 1,
     borderRadius: 10,
-    paddingVertical: 13,
+    paddingVertical: 15,
+    paddingHorizontal: 16,
     alignItems: "center",
     justifyContent: "center",
   },
   label: {
     fontSize: 15,
     fontWeight: "600",
+    letterSpacing: 0.2,
   },
 });

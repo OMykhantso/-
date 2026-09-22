@@ -1,21 +1,23 @@
 import { DeliveryStatus } from "../api/types";
 
 export const STATUS_LABELS: Record<DeliveryStatus, string> = {
-  CREATED: "Awaiting assignment",
-  ASSIGNED: "Assigned",
-  PICKED_UP: "Picked up",
-  IN_TRANSIT: "In transit",
-  DELIVERED: "Delivered",
-  FAILED: "Failed",
-  CANCELLED: "Cancelled",
+  CREATED: "Нове",
+  ASSIGNED: "Призначено",
+  PICKED_UP: "Забрано",
+  IN_TRANSIT: "В дорозі",
+  DELIVERED: "Доставлено",
+  FAILED: "Не вдалося",
+  CANCELLED: "Скасовано",
 };
 
+// Status colors per the shared design spec: CREATED/ASSIGNED = primary blue,
+// PICKED_UP/IN_TRANSIT = amber, DELIVERED = emerald, FAILED/CANCELLED = red.
 export const STATUS_COLORS: Record<DeliveryStatus, string> = {
-  CREATED: "#6B7280",
-  ASSIGNED: "#B45309",
-  PICKED_UP: "#1D4ED8",
-  IN_TRANSIT: "#7C3AED",
-  DELIVERED: "#15803D",
-  FAILED: "#B91C1C",
-  CANCELLED: "#4B5563",
+  CREATED: "#2563EB",
+  ASSIGNED: "#2563EB",
+  PICKED_UP: "#F59E0B",
+  IN_TRANSIT: "#F59E0B",
+  DELIVERED: "#10B981",
+  FAILED: "#EF4444",
+  CANCELLED: "#EF4444",
 };

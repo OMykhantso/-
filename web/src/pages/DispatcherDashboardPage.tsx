@@ -59,18 +59,18 @@ export default function DispatcherDashboardPage() {
     <div className="page">
       <div className="page-header">
         <div>
-          <h1>Dispatcher control center</h1>
-          <p className="muted">Assign couriers, optimize routes, and monitor operations live.</p>
+          <h1>Панель диспетчера</h1>
+          <p className="muted">Призначайте кур'єрів, оптимізуйте маршрути та стежте за операціями в реальному часі.</p>
         </div>
       </div>
 
       <div className="tabs">
         {(["deliveries", "map", "routes", "stats"] as Tab[]).map((t) => (
           <button key={t} className={tab === t ? "tab-btn active" : "tab-btn"} onClick={() => setTab(t)}>
-            {t === "deliveries" && "Deliveries"}
-            {t === "map" && "Live map"}
-            {t === "routes" && "Routes"}
-            {t === "stats" && "Stats"}
+            {t === "deliveries" && "Доставки"}
+            {t === "map" && "Карта в реальному часі"}
+            {t === "routes" && "Маршрути"}
+            {t === "stats" && "Статистика"}
           </button>
         ))}
       </div>
@@ -92,7 +92,7 @@ export default function DispatcherDashboardPage() {
             <div className="panel map-panel large">
               {fleetPositions.length === 0 ? (
                 <div className="empty-state">
-                  <p>No courier locations reported yet.</p>
+                  <p>Ще немає даних про місцезнаходження кур'єрів.</p>
                 </div>
               ) : (
                 <FleetMap positions={fleetPositions} />

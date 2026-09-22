@@ -27,13 +27,13 @@ export default function DeliveryCard({ delivery, onPress, sequenceLabel, etaAt }
       </View>
 
       <View style={styles.addressBlock}>
-        <Text style={styles.addressLabel}>Pickup</Text>
+        <Text style={styles.addressLabel}>Звідки</Text>
         <Text style={styles.addressText} numberOfLines={1}>
           {delivery.pickupAddress.street}, {delivery.pickupAddress.city}
         </Text>
       </View>
       <View style={styles.addressBlock}>
-        <Text style={styles.addressLabel}>Dropoff</Text>
+        <Text style={styles.addressLabel}>Куди</Text>
         <Text style={styles.addressText} numberOfLines={1}>
           {delivery.dropoffAddress.street}, {delivery.dropoffAddress.city}
         </Text>
@@ -46,7 +46,9 @@ export default function DeliveryCard({ delivery, onPress, sequenceLabel, etaAt }
       ) : null}
 
       {eta ? (
-        <Text style={styles.eta}>ETA {new Date(eta).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</Text>
+        <Text style={styles.eta}>
+          Орієнтовний час прибуття: {new Date(eta).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+        </Text>
       ) : null}
     </Pressable>
   );
@@ -55,26 +57,31 @@ export default function DeliveryCard({ delivery, onPress, sequenceLabel, etaAt }
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 10,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: "#E2E8F0",
+    shadowColor: "#0F172A",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 24,
+    elevation: 2,
   },
   cardPressed: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: "#F8FAFC",
   },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 8,
+    marginBottom: 10,
   },
   sequenceBadge: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "#111827",
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: "#2563EB",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -84,8 +91,8 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   statusPill: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
     borderRadius: 999,
     marginLeft: "auto",
   },
@@ -96,26 +103,26 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   addressBlock: {
-    marginBottom: 4,
+    marginBottom: 6,
   },
   addressLabel: {
     fontSize: 11,
-    color: "#9CA3AF",
+    color: "#64748B",
     fontWeight: "600",
     textTransform: "uppercase",
   },
   addressText: {
     fontSize: 14,
-    color: "#111827",
+    color: "#0F172A",
   },
   description: {
     marginTop: 4,
     fontSize: 13,
-    color: "#6B7280",
+    color: "#64748B",
     fontStyle: "italic",
   },
   eta: {
-    marginTop: 6,
+    marginTop: 8,
     fontSize: 12,
     color: "#2563EB",
     fontWeight: "600",
