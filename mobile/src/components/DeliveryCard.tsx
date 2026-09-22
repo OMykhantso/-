@@ -47,7 +47,8 @@ export default function DeliveryCard({ delivery, onPress, sequenceLabel, etaAt }
 
       {eta ? (
         <Text style={styles.eta}>
-          Орієнтовний час прибуття: {new Date(eta).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+          Орієнтовний час прибуття:{" "}
+          {new Date(eta).toLocaleTimeString("uk-UA", { hour: "2-digit", minute: "2-digit" })}
         </Text>
       ) : null}
     </Pressable>

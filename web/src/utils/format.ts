@@ -30,7 +30,7 @@ export function formatDate(input: string | null | undefined): string {
   if (!input) return "—";
   const d = new Date(input);
   if (Number.isNaN(d.getTime())) return "—";
-  return d.toLocaleString(undefined, {
+  return d.toLocaleString("uk-UA", {
     month: "short",
     day: "numeric",
     hour: "2-digit",

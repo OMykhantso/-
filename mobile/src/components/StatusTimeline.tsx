@@ -22,7 +22,7 @@ export default function StatusTimeline({ history }: StatusTimelineProps) {
           </View>
           <View style={styles.content}>
             <Text style={styles.status}>{STATUS_LABELS[entry.status]}</Text>
-            <Text style={styles.time}>{new Date(entry.createdAt).toLocaleString()}</Text>
+            <Text style={styles.time}>{new Date(entry.createdAt).toLocaleString("uk-UA")}</Text>
             {entry.note ? <Text style={styles.note}>{entry.note}</Text> : null}
           </View>
         </View>
