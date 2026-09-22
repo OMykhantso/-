@@ -58,9 +58,6 @@
           "cameraPermission": "The courier app needs camera access to take a proof-of-delivery photo."
         }
       ]
-    ],
-    "extra": {
-      "router": {}
-    }
+    ]
   }
 }
